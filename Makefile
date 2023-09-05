@@ -12,7 +12,7 @@ solve_matrix_market: solve_matrix_market.cpp
 	-lm -ldl -lpthread 
 
 memcheck: solve_matrix_market
-	valgrind --leak-check=yes ./solve_matrix_market
+	valgrind --leak-check=full --show-leak-kinds=all --suppressions=valgrind.supp ./solve_matrix_market
 
 .PHONY: clean
 
