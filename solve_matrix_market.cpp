@@ -1,5 +1,6 @@
 #include "mkl.h"
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <memory>
@@ -212,16 +213,15 @@ struct CsrMatrix {
 };
 
 int main(int argc, char **argv) try {
-    auto matrix = std::string("bfwb62.mtx");
-    // auto matrix = std::string("pre2.mtx");
+    // read the matrix
+    auto home = std::string(std::getenv("HOME"));
+    auto matrix = home + "/Downloads/matrix-market/bfwb62.mtx";
 
+    // convert to CSR
     auto coo = read_matrix_market(matrix);
     auto csr = CsrMatrix::from(coo);
-    return 0;
 
-    auto rhs = std::vector<double>(csr->m, 1.0);
-    auto x = std::vector<double>(csr->m, 0.0);
-
+    // set some constants for DSS
     MKL_INT opt = MKL_DSS_MSG_LVL_WARNING + MKL_DSS_TERM_LVL_ERROR + MKL_DSS_ZERO_BASED_INDEXING;
     MKL_INT sym = MKL_DSS_NON_SYMMETRIC;
     if (coo->symmetric) {
@@ -229,9 +229,8 @@ int main(int argc, char **argv) try {
     }
     MKL_INT type = MKL_DSS_INDEFINITE;
 
-    _MKL_DSS_HANDLE_t handle;
-
     // initialize the solver
+    _MKL_DSS_HANDLE_t handle;
     auto error = dss_create(handle, opt);
     if (error != MKL_DSS_SUCCESS) {
         throw "DSS failed when creating the solver handle";
@@ -256,6 +255,8 @@ int main(int argc, char **argv) try {
     }
 
     // get the solution vector
+    auto rhs = std::vector<double>(csr->m, 1.0);
+    auto x = std::vector<double>(csr->m, 0.0);
     MKL_INT n_rhs = 1;
     error = dss_solve_real(handle, opt, rhs.data(), n_rhs, x.data());
     if (error != MKL_DSS_SUCCESS) {
