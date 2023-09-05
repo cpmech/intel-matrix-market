@@ -1,4 +1,5 @@
 #include "mkl.h"
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -215,7 +216,8 @@ struct CsrMatrix {
 int main(int argc, char **argv) try {
     // read the matrix
     auto home = std::string(std::getenv("HOME"));
-    auto matrix = home + "/Downloads/matrix-market/bfwb62.mtx";
+    // auto matrix = home + "/Downloads/matrix-market/bfwb62.mtx";
+    auto matrix = home + "/Downloads/matrix-market/pre2.mtx";
 
     // convert to CSR
     auto coo = read_matrix_market(matrix);
@@ -266,6 +268,22 @@ int main(int argc, char **argv) try {
     // clear dss data
     dss_delete(handle, opt);
 
+    // check the solution
+    auto op = SPARSE_OPERATION_NON_TRANSPOSE;
+    auto desc = matrix_descr{
+        coo->symmetric ? SPARSE_MATRIX_TYPE_SYMMETRIC : SPARSE_MATRIX_TYPE_GENERAL,
+        SPARSE_FILL_MODE_UPPER,
+        SPARSE_DIAG_NON_UNIT,
+    };
+    auto rhs_new = std::vector<double>(csr->m, 0.0);
+    mkl_sparse_d_mv(op, 1.0, csr->handle, desc, x.data(), 0.0, rhs_new.data());
+    for (MKL_INT k = 0; k < coo->m; k++) {
+        auto diff = fabs(rhs[k] - rhs_new[k]);
+        if (diff > 1e-10) {
+            std::cout << "diff[" << k << "] = " << diff << " is too high" << std::endl;
+            return 1;
+        }
+    }
     return 0;
 
 } catch (std::exception &e) {
