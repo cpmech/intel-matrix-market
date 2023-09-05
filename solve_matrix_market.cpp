@@ -202,7 +202,6 @@ struct CsrMatrix {
     }
 
     ~CsrMatrix() {
-        std::cout << "################################################### destroy ####" << std::endl;
         if (this->row_pointers != NULL) {
             free(this->row_pointers);
         }
