@@ -1,22 +1,24 @@
 # Linear systems with Intel DSS and matrix market
 
-This code solves linear systems with Intel DSS solver and large matrices from Matrix Market
+This code solves linear systems with Intel DSS solver and large matrices from Matrix Market.
 
-## Installation
+You may install Intel MKL locally or use a Docker container as explained in the next section.
 
-### 1 Install Intel MKL
+## Local Installation
+
+**1 Install Intel MKL**
 
 ```bash
 bash scripts/install-intel-mkl-linux.bash
 ```
 
-### 2 Download some Matrix Market Files
+**2 Download some Matrix Market Files**
 
 ```bash
 bash scripts/download-from-matrix-market.bash
 ```
 
-### 3 Run Example
+**3 Run Example**
 
 ```bash
 bash ./all.bash
@@ -24,14 +26,20 @@ bash ./all.bash
 
 ## Using Docker
 
-### Use Existent Image from cpmech
+You may use an existent image from `cpmech` or build the Docker image yourself (see script `docker-build-image.bash`).
 
-Just reopen this folder in a container
+**1 Reopen this folder in a container**
 
 ![VS Code Remote Development](remote-dev-with-vscode.gif)
 
-### Build the Docker Image
+**2 Download some Matrix Market Files**
 
 ```bash
-bash ./scripts/docker-build-image.bash
+bash scripts/download-from-matrix-market.bash
+```
+
+**3 Run Example**
+
+```bash
+bash ./all.bash
 ```

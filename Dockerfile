@@ -28,9 +28,6 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
 COPY . /tmp/intel-matrix-market
 WORKDIR /tmp/intel-matrix-market
 
-# download matrix market files
-RUN bash scripts/download-from-matrix-market.bash
-
 # install intel MKL
 RUN bash scripts/install-intel-mkl-linux.bash
 
