@@ -14,21 +14,25 @@ RUN apt-get update -y && \
 # essential tools
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
   ca-certificates \
+  cmake \
+  g++ \
+  make \
   netbase \
   curl \
   git \
   gnupg \
+  wget \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # copy files
 COPY . /tmp/intel-matrix-market
 WORKDIR /tmp/intel-matrix-market
 
-# install intel MKL
-#RUN bash install-intel-mkl-linux.bash
-
 # download matrix market files
-#RUN bash download-from-matrix-market.bash
+RUN bash scripts/download-from-matrix-market.bash
+
+# install intel MKL
+RUN bash scripts/install-intel-mkl-linux.bash
 
 # configure image for remote development
-#RUN bash common-debian.sh
+RUN bash scripts/common-debian.sh

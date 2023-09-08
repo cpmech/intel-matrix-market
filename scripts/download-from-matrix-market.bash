@@ -2,8 +2,8 @@
 
 set -e
 
+mkdir -p ~/Downloads/matrix-market
 cd ~/Downloads
-mkdir -p matrix-market
 cd matrix-market
 
 get_matrix() {
