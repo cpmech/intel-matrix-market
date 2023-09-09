@@ -28,6 +28,8 @@ bash ./all.bash
 
 You may use an existent image from `cpmech` or build the Docker image yourself (see script `docker-build-image.bash`).
 
+When using VS Code, the extension [ms-vscode-remote.remote-containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) is recommended.
+
 **1 Reopen this folder in a container**
 
 ![VS Code Remote Development](remote-dev-with-vscode.gif)
